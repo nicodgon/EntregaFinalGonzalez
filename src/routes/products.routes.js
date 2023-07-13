@@ -1,55 +1,76 @@
-import { ProductManager } from "../ProductManager.js"
+import { ProductManager } from "../ProductManager.js";
 import { Router } from "express";
 const router = Router();
 // si no funciona cambiar el filePath por "src/data/products.json"
 const filePath = "src/data/products.json";
 const productService = new ProductManager(filePath);
 
-router.get ("/", async (req,res)=>{
-  try{
+//Obtener todos los productos
+router.get("/", async (req, res) => {
+  try {
     const limit = parseInt(req.query.limit);
     const result = await productService.getProducts(limit);
-    res.json({status:"success",payload:result});
-  }catch(error){
+    res.json({ status: "success", payload: result });
+  } catch (error) {
     res.send(error.message);
   }
-})
-router.get ("/:pid", async (req,res)=>{
-  try{
+});
+//Obtener producto por id
+router.get("/:pid", async (req, res) => {
+  try {
     const pid = parseInt(req.params.pid);
     const result = await productService.getProductById(pid);
-    res.json({status:"success",payload:result});
-  }catch(error){
+    if(result){
+      res.json({ status: "success", payload: result });
+    }else{
+      res.json({ status: "error", message: "El producto no ha sido encontrado" });
+    }
+  } catch (error) {
     res.send(error.message);
   }
-})
-router.post ("/", async (req,res)=>{
-  try{
-    const prod = await req.body;
-    productService.addProduct(prod);
-    res.json({status:"success",message:"Usuario creado"});
-  }catch(error){
+});
+// Agregar producto
+router.post("/", async (req, res) => {
+  try {
+    const prod = req.body;
+    const agregado = await productService.addProduct(prod);
+    if(agregado){
+      res.json({ status: "success", message: "Producto agregado" });
+    } else {
+      res.json({ status: "error", message: "El producto no ha sido agregado correctamente" });
+    }
+  } catch (error) {
     res.send(error.message);
   }
-})
-router.put ("/:pid", async (req,res)=>{
-  try{
-    const pid = parseInt (req.params.pid);
-    const prod = await req.body;
-    productService.updateProduct(pid,prod);
-    res.json({status:"success",message:"Usuario actualizado"});
-  }catch(error){
+});
+// Actualizar producto
+router.put("/:pid", async (req, res) => {
+  try {
+    const pid = parseInt(req.params.pid);
+    const prod = req.body;
+    const updateProd= await productService.updateProduct(pid, prod);
+      if (updateProd){
+      res.json({ status: "success", message: "Producto actualizado" });
+    }else{
+      res.json({ status: "error", message: "El producto no ha sido actualizado correctamente" });
+    }
+  } catch (error) {
     res.send(error.message);
   }
-})
-router.delete("/:pid", async (req,res)=>{
-  try{
-    const pid = parseInt (req.params.pid);
-    productService.deleteProduct(pid);
-    res.json({status:"success",message:"Usuario eliminado"});
-  }catch(error){
+});
+// Eliminar producto
+router.delete("/:pid", async (req, res) => {
+  try {
+    const pid = parseInt(req.params.pid);
+    const deleteProd = await productService.deleteProduct(pid);
+    if(deleteProd){
+      res.json({ status: "success", message: "Producto eliminado" });
+    }else{
+      res.json({ status: "error", message: "El producto no ha sido eliminado correctamente" });
+    }
+  } catch (error) {
     res.send(error.message);
   }
-})
+});
 
-export {router as productsRouter}
+export { router as productsRouter };

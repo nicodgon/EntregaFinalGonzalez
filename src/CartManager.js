@@ -4,10 +4,10 @@ export class CartManager {
   constructor (path){
     this.path = path;
   }
-  addCart(){
+  async addCart(){
     try{
       // Leer el arhivo y guardar en una variable
-      const content = fs.readFileSync(this.path,'utf-8');
+      const content = await fs.promises.readFile(this.path,'utf-8');
       const carts= JSON.parse(content);
       // Declarar el id autoincrementable
       let id;
@@ -23,18 +23,18 @@ export class CartManager {
       }
       // agregar nuevo carrito
       carts.push(newCart);
-      fs.writeFileSync(this.path,JSON.stringify(carts,null,'\t'));
+      await fs.promises.writeFile(this.path,JSON.stringify(carts,null,'\t'));
     }catch(error){
       console.log(error.message);
     }
   }
-  getCartById(id){
+  async getCartById(id){
       try{
-          const contenido = fs.readFileSync(this.path,"utf-8");
+          const contenido = await fs.promises.readFile(this.path,"utf-8");
           const carts = JSON.parse(contenido);
           const compareId = carts.find(e=>e.id == id);
           if(!compareId){
-              return {error:'the object with the specified id does not exist'}
+              return false
           }else{
               return compareId
           };
@@ -42,10 +42,10 @@ export class CartManager {
           console.log(error.message);
       }
   }
-  addProductById(cid,pid){
+  async addProductById(cid,pid){
     try{
       // leer archivo y comprar id del carro con el id recibido
-      const contenido = fs.readFileSync(this.path,"utf-8");
+      const contenido = await fs.promises.readFile(this.path,"utf-8");
       const carts = JSON.parse(contenido);
       const compareIdCart = carts.find(e=>e.id == cid);
       if(compareIdCart){
@@ -61,9 +61,10 @@ export class CartManager {
         }else{
           carts[indexCart].products.push(product)
         }
-        fs.writeFileSync(this.path,JSON.stringify(carts,null,'\t'));
+        await fs.promises.writeFile(this.path,JSON.stringify(carts,null,'\t'));
+        return true
       }else{
-        console.log('error: the cart with the specified id does not exist')
+        return false
       };
     }catch(error){
       console.log(error.message);

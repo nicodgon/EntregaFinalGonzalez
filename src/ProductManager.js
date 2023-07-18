@@ -71,6 +71,7 @@ export class ProductManager {
         const compareId = contenidoJson.filter((e) => e.id <= limit);
         return compareId;
       } else {
+        // si no se pasó un limite se devuelve el array completo
         return contenidoJson;
       }
     } catch (error) {

@@ -1,1 +1,28 @@
-[]
+[
+	{
+		"title": "pantalón",
+		"description": "pantalón negro",
+		"code": "bca32",
+		"price": 9000,
+		"status": true,
+		"stock": 12,
+		"category": "pantalones",
+		"thumbnails": [
+			"imagen de pantalón"
+		],
+		"id": 1
+	},
+	{
+		"title": "remera",
+		"description": "remera roja",
+		"code": "abc123",
+		"price": 4000,
+		"status": true,
+		"stock": 14,
+		"category": "remeras",
+		"thumbnails": [
+			"sin imagen"
+		],
+		"id": 2
+	}
+]

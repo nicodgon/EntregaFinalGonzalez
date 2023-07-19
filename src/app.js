@@ -34,7 +34,22 @@ app.use("/api/views", viewsRouter);
 let products=[];
 io.on("connection",(socket)=>{
   socket.on("producto",(data)=>{
+    let id;
+    if (!products.length) {
+      id = 1;
+    } else {
+      id = products[products.length - 1].id + 1;
+    }
+    data.id=id
     products.push(data)
+    io.emit('arrayProducts',products);
+  })
+  socket.on("productDelete",(id)=>{
+    const prodId=products.find(prod=>prod.id==id)
+    if(prodId){
+      const result=products.indexOf(prodId)
+      products.splice(result,1)
+    }
     io.emit('arrayProducts',products);
   })
 })

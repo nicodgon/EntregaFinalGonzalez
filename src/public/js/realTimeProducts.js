@@ -19,8 +19,10 @@ const indicarLista=document.getElementById('indicarLista');
 
 btn.addEventListener('click',()=>{
   event.preventDefault()
-  socketClient.emit("producto",{title:title.value,description:description.value,code:code.value,price:price.value,status:status.value,stock:stock.value,category:category.value});
-  indicarLista.innerHTML='Lista de productos: '
+  if(title.value && description.value && code.value && price.value && status.value && stock.value && category.value){
+    socketClient.emit("producto",{title:title.value,description:description.value,code:code.value,price:price.value,status:status.value,stock:stock.value,category:category.value});
+    indicarLista.innerHTML='Lista de productos: '
+  }
 })
 
 //Eliminar un producto
@@ -31,7 +33,6 @@ btnDel.addEventListener('click',()=>{
 
 socketClient.on("arrayProducts",(dataServer)=>{
   let elementContainer="";
-  let id=0
   dataServer.forEach(({title,description,code,price,status,stock,category,id}) => {
     elementContainer=elementContainer+
     `<ol>

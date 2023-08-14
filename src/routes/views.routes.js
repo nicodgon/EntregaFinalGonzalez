@@ -1,4 +1,4 @@
-import { ProductManager } from "../ProductManager.js";
+import { ProductManager } from "../dao/managers/fileSystem/productsFs.js"
 import { Router } from "express";
 const router = Router();
 // si no funciona cambiar el filePath por "src/data/products.json"
@@ -24,5 +24,12 @@ router.get("/realTimeProducts", (req, res) => {
   }
 });
 
+router.get("/products", (req, res) => {
+  try {
+    res.render('products');
+  } catch (error) {
+    res.send(error.message);
+  }
+});
 
 export {router as viewsRouter}

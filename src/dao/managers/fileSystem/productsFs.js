@@ -1,4 +1,5 @@
 import fs from "fs";
+import {v4 as uuidv4} from "uuid";
 
 export class ProductManager {
   constructor(path) {
@@ -14,15 +15,9 @@ export class ProductManager {
       // Leer el arhivo y guardar en una variable
       const contenido = await fs.promises.readFile(this.path, "utf-8");
       const productos = JSON.parse(contenido);
-      // Declarar el id autoincrementable
-      let id;
-      if (!productos.length) {
-        id = 1;
-      } else {
-        id = productos[productos.length - 1].id + 1;
-      }
       // agregar id al objeto
-      prod.id = id;
+      let id=uuidv4();
+      prod.id=id
       //introducir las rutas de imagenes a un array
       if (prod.thumbnails){
         const newThumbnails = [prod.thumbnails];

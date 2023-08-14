@@ -1,15 +1,22 @@
-import { ProductManager } from "../ProductManager.js";
-import { Router } from "express";
-const router = Router();
+// import { ProductManager } from "../dao/managers/fileSystem/productsFs.js"
 // si no funciona cambiar el filePath por "src/data/products.json"
-const filePath = "src/data/products.json";
-const productService = new ProductManager(filePath);
+// const filePath = "src/data/products.json";
+// const productService = new ProductManager(filePath);
+
+import { ProductsMongo } from "../dao/managers/mongo/productsMongo.js";
+import { Router } from "express";
+
+const router = Router();
+const productService=new ProductsMongo();
 
 //Obtener todos los productos
 router.get("/", async (req, res) => {
   try {
     const limit = parseInt(req.query.limit);
-    const result = await productService.getProducts(limit);
+    let page = parseInt(req.query.page);
+    const query = req.query.query;
+    const sort = parseInt(req.query.sort);
+    const result = await productService.getProducts(limit,page,query,sort);
     res.json({ status: "success", payload: result });
   } catch (error) {
     res.send(error.message);
@@ -46,7 +53,7 @@ router.post("/", async (req, res) => {
 // Actualizar producto
 router.put("/:pid", async (req, res) => {
   try {
-    const pid = parseInt(req.params.pid);
+    const pid = req.params.pid;
     const prod = req.body;
     const updateProd= await productService.updateProduct(pid, prod);
       if (updateProd){
@@ -61,7 +68,7 @@ router.put("/:pid", async (req, res) => {
 // Eliminar producto
 router.delete("/:pid", async (req, res) => {
   try {
-    const pid = parseInt(req.params.pid);
+    const pid = req.params.pid;
     const deleteProd = await productService.deleteProduct(pid);
     if(deleteProd){
       res.json({ status: "success", message: "Producto eliminado" });

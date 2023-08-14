@@ -6,16 +6,21 @@ import { viewsRouter } from "./routes/views.routes.js";
 import { Server } from "socket.io";
 import path from "path";
 import { __dirname } from "./utils.js";
+import { config } from "./config/config.js"
+import { connectDB } from "./config/dbConnection.js";
 
-const port = 8080;
+const port = config.server.port;
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//Midlewares
+//midlewares
 app.use(express.static(path.join(__dirname,"/public")))
 
 const expressServer = app.listen(port, () => console.log(`Server listening on port: ${port}`));
+
+//conexion a la base de datos
+connectDB();
 
 //socket.io
 const io= new Server(expressServer)

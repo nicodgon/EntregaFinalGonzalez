@@ -37,19 +37,102 @@ export class CartsMongo{
   //Agregar producto al carrito por id
   async addProductById(cid,pid){
     try{
+      const cart = await this.model.findById(cid);
+
+      if(!cart){
+        throw new Error('Carrito no encontrado');
+      }
+
       const newProduct = {
-        product:2,
+        product:pid,
         quantity:1
       }
-      const update = await this.model.create({_id:cid},{$set:{products:[newProduct]}})
-      const result = await this.model.aggregate([
-        {
-          $match:{products:{product:pid}}
-        }
-      ])
-      return result
+
+      const existingProductIndex= cart.products.findIndex(p=>p.product===pid);
+
+      if(existingProductIndex !== -1){
+        cart.products[existingProductIndex].quantity+=1;
+      }else{
+        cart.products.push(newProduct);
+      }
+      const updatedCart= await cart.save();
+      return updatedCart;
     }catch(error){
       console.log(error.message);
     }
+  }
+
+  async deleteProductFromCart(cid,pid){
+  try{
+    const cart = await this.model.findById(cid);
+
+    if(!cart){
+      throw new Error('Carrito no encontrado');
+    }
+
+    const existingProductIndex= cart.products.findIndex(p=>p.product==pid);
+
+    if(existingProductIndex !== -1){
+      cart.products.splice(existingProductIndex,1)
+      const del= await cart.save();
+      return del
+    }else{
+      throw new Error('Producto no encontrado');
+    }
+  }catch(error){
+    console.log(error.message);
+  }
+  }
+
+  async deleteAllProductsFromCart(cid){
+  try{
+    const cart = await this.model.findById(cid);
+  
+    if(!cart){
+      throw new Error('Carrito no encontrado');
+    }
+    cart.products=[]
+    const delAll= await cart.save();
+    return delAll
+  }catch(error){
+    console.log(error.message);
+  }
+  }
+
+  async updateAllProductsFromCart(cid,prods){
+  try{
+    const cart = await this.model.findById(cid);
+  
+    if(!cart){
+      throw new Error('Carrito no encontrado');
+    }
+    cart.products=[prods]
+    const updateAll= await cart.save();
+    return updateAll
+  }catch(error){
+    console.log(error.message);
+  }
+  }
+
+  async updateQuantity(cid,pid,quant){
+  try{
+    const cart = await this.model.findById(cid);
+  
+    if(!cart){
+      throw new Error('Carrito no encontrado');
+    }
+
+    const existingProductIndex= cart.products.findIndex(p=>p.product==pid);
+
+    if(existingProductIndex !== -1){
+      cart.products[existingProductIndex].quantity=quant;
+      const updateQuantity= await cart.save();
+      return updateQuantity
+    }else{
+      throw new Error('Producto no encontrado');
+    }
+  }catch(error){
+    console.log(error.message);
+  }
   }
 }

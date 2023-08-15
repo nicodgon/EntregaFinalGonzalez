@@ -24,8 +24,8 @@ const cartsSchema = new mongoose.Schema({
   },
 })
 
-cartsSchema.pre('find',function(){
-  this.populate('products.id');
+cartsSchema.pre('find',function(next){
+  this.populate('product.id');
 })
 
 export const cartsModel=mongoose.model(cartsCollection,cartsSchema)

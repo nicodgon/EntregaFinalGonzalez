@@ -1,5 +1,6 @@
-<h2>Te damos la bienvenida {{user.first_name}}</h2>
 {{#if payload}}
+<h2>Te damos la bienvenida {{user.first_name}}</h2>
+<p>rol: {{user.role}}</p>
 <h1>Nuestro catalogo de productos</h1>
 {{#each payload}}
 <h4>Producto {{this.title}}:</h4>

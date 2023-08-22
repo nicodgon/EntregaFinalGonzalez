@@ -1,15 +1,15 @@
 <h1>Todos mis productos</h1>
-{{#each result}}
-<h3>Producto {{id}}:</h3>
-  <ul>
-    <li>Producto: {{title}}</li>
-    <li>Descripción: {{description}}</li>
-    <li>Codigo: {{code}}</li>
-    <li>Precio: {{price}}</li>
-    <li>Status: {{status}}</li>
-    <li>Stock: {{stock}}</li>
-    <li>Categoría: {{category}}</li>
-    <li>Miniaturas: {{thumbnails}}</li>
-    <li>Id: {{id}}</li>
-  </ul>
+<p style="font-size: 1.6em;font-weight:bold;color:#f00">{{error}}</p>
+{{#each prods}}
+<h3>Producto {{this.title}}:</h3>
+<ul>
+  <li>Descripción: {{this.description}}</li>
+  <li>Codigo: {{this.code}}</li>
+  <li>Precio: {{this.price}}</li>
+  <li>Status: {{this.status}}</li>
+  <li>Stock: {{this.stock}}</li>
+  <li>Categoría: {{this.category}}</li>
+  <li>Miniaturas: {{this.thumbnails}}</li>
+  <li>Id: {{this._id}}</li>
+</ul>
 {{/each}}

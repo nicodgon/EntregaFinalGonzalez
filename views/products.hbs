@@ -1,1 +1,28 @@
-<h1>Products</h1>
+<h2>Te damos la bienvenida {{user.first_name}}</h2>
+{{#if payload}}
+<h1>Nuestro catalogo de productos</h1>
+{{#each payload}}
+<h4>Producto {{this.title}}:</h4>
+<ul>
+  <li>Descripción: {{this.description}}</li>
+  <li>Codigo: {{this.code}}</li>
+  <li>Precio: {{this.price}}</li>
+  <li>Status: {{this.status}}</li>
+  <li>Stock: {{this.stock}}</li>
+  <li>Categoría: {{this.category}}</li>
+  <li>Miniaturas: {{this.thumbnails}}</li>
+  <li>Id: {{this._id}}</li>
+</ul>
+{{/each}}
+
+{{#if hasPrevPage}}
+<a href={{prevLink}}>Anterior</a>
+{{/if}}
+{{page}}
+{{#if hasNextPage}}
+<a href={{nextLink}}>Siguiente</a>
+{{/if}}
+
+{{else}}
+<h2>No hay productos</h2>
+{{/if}}

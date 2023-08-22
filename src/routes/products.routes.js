@@ -1,23 +1,30 @@
-// import { ProductManager } from "../dao/managers/fileSystem/productsFs.js"
-// si no funciona cambiar el filePath por "src/data/products.json"
-// const filePath = "src/data/products.json";
-// const productService = new ProductManager(filePath);
-
-import { ProductsMongo } from "../dao/managers/mongo/productsMongo.js";
 import { Router } from "express";
-
+import { productService } from "../dao/index.js";
 const router = Router();
-const productService=new ProductsMongo();
 
 //Obtener todos los productos
 router.get("/", async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit);
-    let page = parseInt(req.query.page);
-    const query = req.query.query;
-    const sort = parseInt(req.query.sort);
-    const result = await productService.getProducts(limit,page,query,sort);
-    res.json({ status: "success", payload: result });
+    const { limit = 10, page = 1, filtro, sort } = req.query;
+    if (sort && sort !== "asc" && sort !== "des") {
+      return res.render("products", {
+        error: "El orden de los productos no es valido",
+      });
+    }
+    const result = await productService.getProducts(
+      limit,
+      page,
+      filtro,
+      sort
+    );
+    if (result) {
+      res.json({ status: "success", payload: result });
+    } else {
+      res.json({
+        status: "error",
+        payload: "Ha ocurrido un error al intentar obtener los productos",
+      });
+    }
   } catch (error) {
     res.send(error.message);
   }
@@ -25,12 +32,15 @@ router.get("/", async (req, res) => {
 //Obtener producto por id
 router.get("/:pid", async (req, res) => {
   try {
-    const pid = parseInt(req.params.pid);
-    const result = await productService.getProductById(pid);
-    if(result){
+    const pid = req.params.pid;
+    const result = await productService.getProductsById(pid);
+    if (result) {
       res.json({ status: "success", payload: result });
-    }else{
-      res.json({ status: "error", message: "El producto no ha sido encontrado" });
+    } else {
+      res.json({
+        status: "error",
+        message: "El producto no ha sido encontrado",
+      });
     }
   } catch (error) {
     res.send(error.message);
@@ -41,10 +51,13 @@ router.post("/", async (req, res) => {
   try {
     const prod = req.body;
     const agregado = await productService.addProduct(prod);
-    if(agregado){
+    if (agregado) {
       res.json({ status: "success", message: "Producto agregado" });
     } else {
-      res.json({ status: "error", message: "El producto no ha sido agregado correctamente" });
+      res.json({
+        status: "error",
+        message: "El producto no ha sido agregado correctamente",
+      });
     }
   } catch (error) {
     res.send(error.message);
@@ -55,11 +68,14 @@ router.put("/:pid", async (req, res) => {
   try {
     const pid = req.params.pid;
     const prod = req.body;
-    const updateProd= await productService.updateProduct(pid, prod);
-      if (updateProd){
+    const updateProd = await productService.updateProduct(pid, prod);
+    if (updateProd) {
       res.json({ status: "success", message: "Producto actualizado" });
-    }else{
-      res.json({ status: "error", message: "El producto no ha sido actualizado correctamente" });
+    } else {
+      res.json({
+        status: "error",
+        message: "El producto no ha sido actualizado correctamente",
+      });
     }
   } catch (error) {
     res.send(error.message);
@@ -70,10 +86,13 @@ router.delete("/:pid", async (req, res) => {
   try {
     const pid = req.params.pid;
     const deleteProd = await productService.deleteProduct(pid);
-    if(deleteProd){
+    if (deleteProd) {
       res.json({ status: "success", message: "Producto eliminado" });
-    }else{
-      res.json({ status: "error", message: "El producto no ha sido eliminado correctamente" });
+    } else {
+      res.json({
+        status: "error",
+        message: "El producto no ha sido eliminado correctamente",
+      });
     }
   } catch (error) {
     res.send(error.message);

@@ -1,0 +1,29 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.nav__container--list {
+  display: flex;
+  gap: 2em;
+  justify-content: center;
+  height: 50px;
+  align-items: end;
+  border: 1px solid #000;
+}
+
+.nav__container--list li{
+  list-style-type: none;
+}
+
+.nav__container--list li a{
+  text-decoration: none;
+  font-size: 1.6em;
+}
+
+.body__container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  text-align: center;
+}

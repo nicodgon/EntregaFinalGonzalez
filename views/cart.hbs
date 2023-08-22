@@ -1,0 +1,16 @@
+<h1>Carrito</h1>
+<p style="font-size: 1.6em;font-weight:bold;color:#f00">{{error}}</p>
+{{#each prod}}
+<h3>{{this.product.title}}:</h3>
+<ul>
+  <li>Descripción: {{this.product.description}}</li>
+  <li>Codigo: {{this.product.code}}</li>
+  <li>Precio: {{this.product.price}}</li>
+  <li>Status: {{this.product.status}}</li>
+  <li>Stock: {{this.product.stock}}</li>
+  <li>Categoría: {{this.product.category}}</li>
+  <li>Miniaturas: {{this.product.thumbnails}}</li>
+  <li>Id: {{this.product._id}}</li>
+</ul>
+<button id={{this.product._id}}>Agregar al carrito</button>
+{{/each}}

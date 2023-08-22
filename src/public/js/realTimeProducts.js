@@ -17,7 +17,7 @@ const btnDel=document.getElementById('delete')
 //Indicar inicio de lista
 const indicarLista=document.getElementById('indicarLista');
 
-btn.addEventListener('click',()=>{
+btn.addEventListener('click',(event)=>{
   event.preventDefault()
   if(title.value && description.value && code.value && price.value && status.value && stock.value && category.value){
     socketClient.emit("producto",{title:title.value,description:description.value,code:code.value,price:price.value,status:status.value,stock:stock.value,category:category.value});
@@ -26,7 +26,7 @@ btn.addEventListener('click',()=>{
 })
 
 //Eliminar un producto
-btnDel.addEventListener('click',()=>{
+btnDel.addEventListener('click',(event)=>{
   event.preventDefault()
   socketClient.emit("productDelete",idDelete.value);
 })

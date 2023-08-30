@@ -121,7 +121,7 @@ router.get("/login", showLoginView, (req, res) => {
 });
 
 router.get("/perfil", checkUserAuthenticated, (req, res) => {
-  res.render("profile", { user: req.session.userInfo });
+  res.render("profile", { user: JSON.parse(JSON.stringify(req.user)) });
 });
 
 router.get("/realTimeProducts", (req, res) => {

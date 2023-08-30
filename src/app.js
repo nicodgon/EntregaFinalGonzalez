@@ -10,6 +10,9 @@ import { config } from "./config/config.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import { sessionsRouter } from "./routes/sessions.routes.js";
+//passport
+import { initializePassport } from "./config/passportConfig.js";
+import passport from "passport";
 
 const port = config.server.port;
 const app = express();
@@ -43,6 +46,11 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+//Configuracion de passport(DESPUES de la config de session y ANTES de las rutas)
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Routes
 app.use(viewsRouter);

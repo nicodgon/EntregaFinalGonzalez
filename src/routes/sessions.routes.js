@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-
+import { sessionsController } from "../controllers/sessions.controller.js";
 const router = Router();
 
 router.post(
@@ -8,56 +8,31 @@ router.post(
   passport.authenticate("signupStrategy", {
     failureRedirect: "/api/sessions/fail-signup",
   }),
-  (req, res) => {
-    res.render("login", { message: "Usuario registrado con exito" });
-  }
+  sessionsController.renderLogin
 );
 
-router.get("/fail-signup", (req, res) => {
-  res.render("signup", { error: "No se pudo registrar el usuario" });
-});
+router.get("/fail-signup", sessionsController.renderFailSignup);
 
 router.post(
   "/login",
   passport.authenticate("loginStrategy", {
     failureRedirect: "/api/sessions/fail-login",
   }),
-  (req, res) => {
-    res.redirect("/perfil");
-  }
+  sessionsController.renderProfile
 );
 
-router.get("/fail-login", (req, res) => {
-  res.render("login", { error: "Credenciales invalidas" });
-});
+router.get("/fail-login", sessionsController.renderFailLogin);
 
-router.get("/loginGithub",passport.authenticate("githubLoginStrategy"))
+router.get("/loginGithub", passport.authenticate("githubLoginStrategy"));
 
-router.get("/github-callback", passport.authenticate("githubLoginStrategy",{
-  failureRedirect:"api/sessions/fail-signup"
-}),(req,res)=>{
-  res.redirect("/perfil")
-})
+router.get(
+  "/github-callback",
+  passport.authenticate("githubLoginStrategy", {
+    failureRedirect: "api/sessions/fail-signup",
+  }),
+  sessionsController.renderProfile
+);
 
-router.get("/logout", (req, res) => {
-  req.logOut(error=>{
-    if(error){
-      return res.render("profile", {
-        user: req.user,
-        error: "No se pudo cerrar la sesion",
-      });
-    }else{
-      req.session.destroy((error) => {
-        if (error)
-          return res.render("profile", {
-            user: req.session.userInfo,
-            error: "No se pudo cerrar la sesion",
-          });
-        res.redirect("/");
-      });
-    }
-  })
-  
-});
+router.get("/logout", sessionsController.renderProfileLogOut);
 
 export { router as sessionsRouter };

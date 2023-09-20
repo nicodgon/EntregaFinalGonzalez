@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 import { productsCollection } from "../../constants/index.js";
+import { categories } from "../../constants/index.js";
 
 //esquema de productos
 const productSchema = new mongoose.Schema({
@@ -35,7 +36,7 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ["remeras", "pantalones", "camperas", "zapatillas"],
+    enum: categories,
   },
 });
 

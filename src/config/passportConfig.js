@@ -1,9 +1,9 @@
 import passport from "passport";
 import LocalStrategy from "passport-local";
 import { createHash, isValidPassword } from "../utils.js";
-import { userService } from "../dao/index.js";
 import githubStrategy from "passport-github2";
 import { config } from "./config.js";
+import { UsersService } from "../services/users.service.js";
 
 export const initializePassport = () => {
   passport.use(
@@ -16,7 +16,7 @@ export const initializePassport = () => {
       async (req, username, password, done) => {
         try {
           const { first_name } = req.body;
-          const user = await userService.getUserByEmail(username);
+          const user = await UsersService.getByEmail(username);
           if (user) {
             return done(null, false);
           }
@@ -25,7 +25,7 @@ export const initializePassport = () => {
             email: username,
             password: createHash(password),
           };
-          const userCreated = await userService.addUser(newUser);
+          const userCreated = await UsersService.add(newUser);
           return done(null, userCreated);
         } catch (error) {
           return done(error);
@@ -42,7 +42,7 @@ export const initializePassport = () => {
       },
       async (username, password, done) => {
         try {
-          const user = await userService.getUserByEmail(username);
+          const user = await UsersService.getByEmail(username);
           if (!user) {
             return done(null, false);
           }
@@ -68,14 +68,14 @@ export const initializePassport = () => {
       },
       async (accesstoken, refreshToken, profile, done) => {
         try {
-          const user = await userService.getUserByEmail(profile.username);
+          const user = await UsersService.getByEmail(profile.username);
           if (!user) {
             const newUser = {
               first_name: "github",
               email: profile.username,
               password: createHash(profile.id),
             };
-            const userCreated = await userService.addUser(newUser)
+            const userCreated = await UsersService.add(newUser)
             return done(null,userCreated)
           } else {
             return done(null, user);
@@ -93,7 +93,7 @@ export const initializePassport = () => {
 
   //recibe el id serializado y done
   passport.deserializeUser(async (id, done) => {
-    const user = await userService.getUserById(id);
+    const user = await UsersService.getById(id);
     done(null, user);
   });
 };

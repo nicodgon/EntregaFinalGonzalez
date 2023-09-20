@@ -48,7 +48,7 @@ export class CartsMongo {
         quantity: 1,
       };
       const existingProductIndex = cart.products.findIndex(
-        (p) => p.product === pid
+        p => p.product == pid
       );
       if (existingProductIndex !== -1) {
         cart.products[existingProductIndex].quantity += 1;

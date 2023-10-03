@@ -13,3 +13,13 @@ export const showLoginView = (req, res, next) => {
     next();
   }
 };
+
+export const checkRole = (roles)=>{
+  return (req,res,next)=>{
+    if(roles.includes(req.user.role)){
+      next()
+    }else{
+      res.json({status:"error",message:"No tiene los permisos necesarios"})
+    }
+  }
+}

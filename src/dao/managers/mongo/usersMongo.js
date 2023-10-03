@@ -43,9 +43,9 @@ export class UsersMongo {
       const arr = [email]
       const exists = arr.some(e=>e.includes("@coder.com"))
       if(pass==='adminCod3r123' && exists){
-        return 'administrador'
+        return 'admin'
       }else {
-        return 'usuario'
+        return 'user'
       }
     } catch (error) {
       throw error;

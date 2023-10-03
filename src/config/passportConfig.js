@@ -25,6 +25,9 @@ export const initializePassport = () => {
             email: username,
             password: createHash(password),
           };
+          if(username.endsWith("@coder.com") && password === "adminCod3r123"){
+            newUser.role="admin"
+          }
           const userCreated = await UsersService.add(newUser);
           return done(null, userCreated);
         } catch (error) {

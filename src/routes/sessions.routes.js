@@ -35,4 +35,6 @@ router.get(
 
 router.get("/logout", sessionsController.renderProfileLogOut);
 
+router.get("/current",)
+
 export { router as sessionsRouter };

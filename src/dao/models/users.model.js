@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { cartsCollection } from "../../constants/index.js";
-
-const usersCollection = "users";
+import { usersCollection } from "../../constants/index.js";
 
 const userSchema = new mongoose.Schema({
   first_name: {

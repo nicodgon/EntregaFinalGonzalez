@@ -13,6 +13,7 @@ import { sessionsRouter } from "./routes/sessions.routes.js";
 //passport
 import { initializePassport } from "./config/passportConfig.js";
 import passport from "passport";
+import { generateProducts } from "./utils/helpers.js";
 
 const port = config.server.port;
 const app = express();
@@ -81,3 +82,17 @@ io.on("connection", (socket) => {
     io.emit("arrayProducts", products);
   });
 });
+
+app.get("/mockingproducts",(req,res)=>{
+  try {
+    const cant =100;
+    let products = []
+    for(let i=0;i<cant;i++){
+      const product = generateProducts()
+      products.push(product)
+    }
+    res.json({status:"success",data:products})
+  } catch (error) {
+    res.json({status:"error",message:message.error})
+  }
+})

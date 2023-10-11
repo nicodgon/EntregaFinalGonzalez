@@ -30,4 +30,8 @@ export class sessionsController {
       }
     });
   };
+  static getUser=(req,res)=>{
+    const user = req.user
+    res.json({status:"success",message:user})
+  }
 }

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import { sessionsController } from "../controllers/sessions.controller.js";
+import { checkUserAuthenticated } from "../middlewares/auth.js";
 const router = Router();
 
 router.post(
@@ -35,6 +36,6 @@ router.get(
 
 router.get("/logout", sessionsController.renderProfileLogOut);
 
-router.get("/current",)
+router.get("/current", checkUserAuthenticated, sessionsController.getUser)
 
 export { router as sessionsRouter };

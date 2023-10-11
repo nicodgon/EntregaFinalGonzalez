@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { CartController } from "../controllers/carts.controller.js";
+import { TicketsController } from "../controllers/tickets.controller.js";
 const router = Router();
 
 //Agregar carrito
@@ -16,5 +17,6 @@ router.delete("/:cid",CartController.deleteAllProducts);
 router.put("/:cid",CartController.updateProducts);
 //Actualizar la cantidad de un producto en el carrito
 router.put("/:cid/product/:pid",CartController.updateProductQuantity);
-
+//Crear ticket
+router.post("/:cid/purchase", TicketsController.createTicket)
 export { router as cartsRouter };

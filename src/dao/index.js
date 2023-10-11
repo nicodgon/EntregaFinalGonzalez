@@ -1,6 +1,7 @@
 import { connectDB } from "../config/dbConnection.js";
 import { CartsMongo } from "./managers/mongo/cartsMongo.js";
 import { ProductsMongo } from "./managers/mongo/productsMongo.js";
+import { TicketsMongo } from "./managers/mongo/ticketsMongo.js";
 import { UsersMongo } from "./managers/mongo/usersMongo.js";
 // import { config } from "../config/config.js";
 // import {CartManager} from "./managers/fileSystem/cartFs.js"
@@ -15,5 +16,6 @@ connectDB();
 const productDao = new ProductsMongo();
 const cartDao = new CartsMongo();
 const usersDao = new UsersMongo();
+const ticketsDao = new TicketsMongo
 
-export { productDao, cartDao, usersDao };
+export { productDao, cartDao, usersDao, ticketsDao };

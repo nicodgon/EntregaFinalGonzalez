@@ -1,4 +1,7 @@
 import { cartsModel } from "../../models/carts.model.js";
+import { addLogger } from "../../../helpers/logger.js";
+
+const logger = addLogger()
 
 export class CartsMongo {
   constructor() {
@@ -16,7 +19,7 @@ export class CartsMongo {
       const content = await this.model.create(newCart);
       return content;
     } catch (error) {
-      console.log(error.message);
+      logger.error("Ha ocurrido un error")
     }
   }
 
@@ -32,7 +35,7 @@ export class CartsMongo {
         return compareId;
       }
     } catch (error) {
-      console.log(error.message);
+      logger.error("Ha ocurrido un error")
     }
   }
 
@@ -58,7 +61,7 @@ export class CartsMongo {
       const updatedCart = await cart.save();
       return updatedCart;
     } catch (error) {
-      console.log(error.message);
+      logger.error("Ha ocurrido un error")
     }
   }
 
@@ -80,7 +83,7 @@ export class CartsMongo {
         throw new Error("Producto no encontrado");
       }
     } catch (error) {
-      console.log(error.message);
+      logger.error("Ha ocurrido un error")
     }
   }
 
@@ -95,7 +98,7 @@ export class CartsMongo {
       const delAll = await cart.save();
       return delAll;
     } catch (error) {
-      console.log(error.message);
+      logger.error("Ha ocurrido un error")
     }
   }
 
@@ -110,7 +113,7 @@ export class CartsMongo {
       const updateAll = await cart.save();
       return updateAll;
     } catch (error) {
-      console.log(error.message);
+      logger.error("Ha ocurrido un error")
     }
   }
 
@@ -132,7 +135,7 @@ export class CartsMongo {
         throw new Error("Producto no encontrado");
       }
     } catch (error) {
-      console.log(error.message);
+      logger.error("Ha ocurrido un error")
     }
   }
 }

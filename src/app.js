@@ -14,6 +14,7 @@ import { sessionsRouter } from "./routes/sessions.routes.js";
 import { initializePassport } from "./config/passportConfig.js";
 import passport from "passport";
 import { generateProducts } from "./utils/helpers.js";
+import { addLogger } from "./helpers/logger.js";
 
 const port = config.server.port;
 const app = express();
@@ -95,4 +96,13 @@ app.get("/mockingproducts",(req,res)=>{
   } catch (error) {
     res.json({status:"error",message:message.error})
   }
+})
+
+const logger = addLogger()
+
+app.get("/loggerTest",(req,res)=>{
+	logger.debug("mensaje de nivel debug")
+	logger.info("mensaje de nivel info")
+	logger.error("mensaje de nivel error")
+  res.send("peticion recibida")
 })

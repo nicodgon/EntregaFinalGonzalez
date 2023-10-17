@@ -1,5 +1,8 @@
 import { productsModel } from "../../models/products.model.js";
 import { categories } from "../../../constants/index.js";
+import { addLogger } from "../../../helpers/logger.js";
+
+const logger = addLogger()
 
 export class ProductsMongo {
   constructor() {
@@ -30,7 +33,7 @@ export class ProductsMongo {
       });
       return prodsPage;
     } catch (error) {
-      console.log(error.message);
+      logger.error("Ha ocurrido un error")
       throw new Error("Hubo un error al obtener los productos");
     }
   }
@@ -41,7 +44,7 @@ export class ProductsMongo {
       const product = await this.model.findById(id);
       return product;
     } catch (error) {
-      console.log(error.message);
+      logger.error("Ha ocurrido un error")
       throw new Error("Hubo un error al obtener el producto");
     }
   }
@@ -52,7 +55,7 @@ export class ProductsMongo {
       const productCreated = await this.model.create(productInfo);
       return productCreated;
     } catch (error) {
-      console.log(error.message);
+      logger.error("Ha ocurrido un error")
       throw new Error("Hubo un error al crear el producto");
     }
   }
@@ -63,7 +66,7 @@ export class ProductsMongo {
       const FindProd = await this.model.updateOne({ _id: id }, prod);
       return FindProd;
     } catch (error) {
-      console.log(error.message);
+      logger.error("Ha ocurrido un error")
       throw new Error("Hubo un error al actualizar el producto");
     }
   }
@@ -74,7 +77,7 @@ export class ProductsMongo {
       const product = await this.model.deleteOne({ _id: id });
       return product;
     } catch (error) {
-      console.log(error.message);
+      logger.error("Ha ocurrido un error")
       throw new Error("Hubo un error al obtener el producto");
     }
   }
@@ -89,7 +92,7 @@ export class ProductsMongo {
         return false;
       }
     } catch (error) {
-      console.log(error.message);
+      logger.error("Ha ocurrido un error")
     }
   }
 }

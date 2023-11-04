@@ -18,6 +18,7 @@ import { addLogger } from "./helpers/logger.js";
 
 const port = config.server.port;
 const app = express();
+const logger = addLogger()
 
 //middlewares
 app.use(express.json());
@@ -26,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "/public")));
 
 const expressServer = app.listen(port, () =>
-  console.log(`Server listening on port: ${port}`)
+  logger.info(`Server listening on port: ${port}`)
 );
 
 //socket.io
@@ -97,8 +98,6 @@ app.get("/mockingproducts",(req,res)=>{
     res.json({status:"error",message:message.error})
   }
 })
-
-const logger = addLogger()
 
 app.get("/loggerTest",(req,res)=>{
 	logger.debug("mensaje de nivel debug")

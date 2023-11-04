@@ -119,4 +119,11 @@ export class ViewsController{
   static renderRealTimeProducts= (req, res) => {
     res.render("realTimeProducts");
   }
+  static renderForgot=(req,res)=>{
+    res.render("forgotPassword")
+  }
+  static renderResetPass=(req,res)=>{
+    const token = req.query.token
+    res.render("resetPassword",{token})
+  }
 }

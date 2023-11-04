@@ -1,3 +1,7 @@
+import { UsersService } from "../services/users.service.js";
+import { generateEmailToken, recoveryEmail } from "../helpers/gmail.js";
+import { validateToken, createHash } from "../utils.js";
+
 export class sessionsController {
   static renderLogin = (req, res) => {
     res.render("login", { message: "Usuario registrado con exito" });
@@ -33,5 +37,38 @@ export class sessionsController {
   static getUser=(req,res)=>{
     const user = req.user
     res.json({status:"success",message:user})
+  }
+  static forgotPassword=async(req,res)=>{
+    try {
+      const {email}=req.body
+      const user = await UsersService.getByEmail(email)
+      if(!user){
+        return res.json({status:"error",message:"No es posible restablecer la contraseña"})
+      }
+      const token = generateEmailToken(email,3*60) //Token de 3 min
+      await recoveryEmail(req,email,token)
+      res.send("Correo enviado, volver al inicio")
+    } catch (error) {
+      res.json({status:"error",message:"No es posible restablecer la contraseña"})
+    }
+  }
+  static resetPassword=async(req,res)=>{
+    try {
+      const token=req.query.token
+      const {newPassword} = req.body
+      const validEmail = validateToken(token)
+      if(validEmail){
+        const user = await UsersService.getByEmail(validEmail)
+        if(user){
+          user.password=createHash(newPassword)
+          await UsersService.updateUser(user._id, user)
+          res.send("Contraseña actualizada <a href='/login'>Ir al login</a>")
+        }
+      }else{
+        return res.send("El token ya caduco, volver a intentarlo <a href='/forgot-password'>Restablecer contraseña</a>")
+      }
+    } catch (error) {
+      return res.send("No se pudo restablecer la contraseña, volver a intentarlo <a href='/forgot-password'>Restablecer contraseña</a>")
+    }
   }
 }

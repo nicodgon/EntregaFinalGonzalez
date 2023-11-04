@@ -18,4 +18,8 @@ router.get("/perfil", checkUserAuthenticated,ViewsController.renderProfile);
 
 router.get("/realTimeProducts",ViewsController.renderRealTimeProducts);
 
+router.get("/forgot-password", ViewsController.renderForgot)
+
+router.get("/reset-password", ViewsController.renderResetPass)
+
 export { router as viewsRouter };

@@ -38,4 +38,8 @@ router.get("/logout", sessionsController.renderProfileLogOut);
 
 router.get("/current", checkUserAuthenticated, sessionsController.getUser)
 
+router.post("/forgot-password", sessionsController.forgotPassword)
+
+router.post("/reset-password", sessionsController.resetPassword)
+
 export { router as sessionsRouter };

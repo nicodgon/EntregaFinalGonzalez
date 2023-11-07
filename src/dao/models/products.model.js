@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 import { productsCollection } from "../../constants/index.js";
 import { categories } from "../../constants/index.js";
+import { usersCollection } from "../../constants/index.js";
 
 //esquema de productos
 const productSchema = new mongoose.Schema({
@@ -38,6 +39,10 @@ const productSchema = new mongoose.Schema({
     required: true,
     enum: categories,
   },
+  owner:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:usersCollection
+  }
 });
 
 productSchema.plugin(mongoosePaginate);

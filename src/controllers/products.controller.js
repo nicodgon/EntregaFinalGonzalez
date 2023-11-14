@@ -42,6 +42,7 @@ export class productsController {
   static addItem = async (req, res) => {
     try {
       const prod = req.body;
+      productInfo.owner = req.user._id
       const aggregate = await ProductsService.add(prod);
       if (aggregate) {
         res.json({ status: "success", message: "Producto agregado" });

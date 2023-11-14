@@ -15,6 +15,7 @@ import { initializePassport } from "./config/passportConfig.js";
 import passport from "passport";
 import { generateProducts } from "./utils/helpers.js";
 import { addLogger } from "./helpers/logger.js";
+import { usersRouter } from "./routes/users.routes.js";
 
 const port = config.server.port;
 const app = express();
@@ -60,6 +61,7 @@ app.use(viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/sessions", sessionsRouter);
+app.use("/api/users", usersRouter);
 
 //socket.io
 let products = [];

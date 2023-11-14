@@ -8,7 +8,7 @@ router.get("/", productsController.getAllItems);
 //Obtener producto por id
 router.get("/:pid", productsController.getItem);
 // Agregar producto
-router.post("/", checkUserAuthenticated, checkRole(["admin"]), productsController.addItem);
+router.post("/", checkUserAuthenticated, checkRole(["admin","premium"]), productsController.addItem);
 // Actualizar producto
 router.put("/:pid", checkUserAuthenticated, checkRole(["admin"]),productsController.updateItem);
 // Eliminar producto

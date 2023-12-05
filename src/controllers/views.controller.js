@@ -80,7 +80,8 @@ export class ViewsController{
           hasNextPage: result.hasNextPage,
           prevLink: prevL,
           nextLink: nextL,
-          user: req.session.userInfo,
+          userName: req.user.first_name,
+          userRole: req.user.role,
         };
         res.render("products", resultView);
       } else {
@@ -115,6 +116,9 @@ export class ViewsController{
   }
   static renderProfile= (req, res) => {
     res.render("profile", { user: JSON.parse(JSON.stringify(req.user)) });
+  }
+  static renderChat= (req, res) => {
+    res.render("chat");
   }
   static renderRealTimeProducts= (req, res) => {
     res.render("realTimeProducts");

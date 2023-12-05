@@ -12,6 +12,6 @@ router.post("/", checkUserAuthenticated, checkRole(["admin","premium"]), product
 // Actualizar producto
 router.put("/:pid", checkUserAuthenticated, checkRole(["admin"]),productsController.updateItem);
 // Eliminar producto
-router.delete("/:pid", checkUserAuthenticated, checkRole(["admin"]),productsController.deleteItem);
+router.delete("/:pid", checkUserAuthenticated, checkRole(["admin","premium"]),productsController.deleteItem);
 
 export { router as productsRouter };

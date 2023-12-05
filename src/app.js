@@ -10,16 +10,20 @@ import { config } from "./config/config.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import { sessionsRouter } from "./routes/sessions.routes.js";
+import {chatModel} from "./dao/models/chat.model.js";
+import { mockingRouter } from "./routes/mocking.routes.js";
+import { loggerRouter } from "./routes/logger.routes.js";
+import { checkRole } from "./middlewares/auth.js";
+
 //passport
 import { initializePassport } from "./config/passportConfig.js";
 import passport from "passport";
-import { generateProducts } from "./utils/helpers.js";
 import { addLogger } from "./helpers/logger.js";
 import { usersRouter } from "./routes/users.routes.js";
 
 const port = config.server.port;
 const app = express();
-const logger = addLogger()
+const logger = addLogger();
 
 //middlewares
 app.use(express.json());
@@ -62,8 +66,10 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/mockingproducts", mockingRouter);
+app.use("/api/loggerTest", loggerRouter);
 
-//socket.io
+//socket.io products
 let products = [];
 io.on("connection", (socket) => {
   socket.on("producto", (data) => {
@@ -87,23 +93,17 @@ io.on("connection", (socket) => {
   });
 });
 
-app.get("/mockingproducts",(req,res)=>{
-  try {
-    const cant =100;
-    let products = []
-    for(let i=0;i<cant;i++){
-      const product = generateProducts()
-      products.push(product)
-    }
-    res.json({status:"success",data:products})
-  } catch (error) {
-    res.json({status:"error",message:message.error})
-  }
-})
-
-app.get("/loggerTest",(req,res)=>{
-	logger.debug("mensaje de nivel debug")
-	logger.info("mensaje de nivel info")
-	logger.error("mensaje de nivel error")
-  res.send("peticion recibida")
-})
+//socket.io chat
+io.on("connection", (socket) => {
+  console.log("nuevo cliente conectado");
+  socket.on("authenticated", async (msg) => {
+    const messages = await chatModel.find();
+    socket.emit("messageHistory", messages);
+    socket.broadcast.emit("newUser", msg);
+  });
+  socket.on("message", async (data) => {
+    const messageCreated = await chatModel.create(data)
+    const messages = await chatModel.find();
+    io.emit("messageHistory", messages);
+  });
+});

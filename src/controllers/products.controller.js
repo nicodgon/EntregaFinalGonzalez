@@ -42,7 +42,7 @@ export class productsController {
   static addItem = async (req, res) => {
     try {
       const prod = req.body;
-      productInfo.owner = req.user._id
+      prod.owner = req.user._id
       const aggregate = await ProductsService.add(prod);
       if (aggregate) {
         res.json({ status: "success", message: "Producto agregado" });
@@ -76,14 +76,20 @@ export class productsController {
   static deleteItem = async (req, res) => {
     try {
       const pid = req.params.pid;
-      const deleteProd = await ProductsService.delete(pid);
-      if (deleteProd) {
-        res.json({ status: "success", message: "Producto eliminado" });
-      } else {
-        res.json({
-          status: "error",
-          message: "El producto no ha sido eliminado correctamente",
-        });
+      const product = await ProductsService.getOne(pid)
+      const role = req.user.role
+      if(role === "premium" && product.owner.toString()=== req.user._id.toString() || role === "admin"){
+        const deleteProd = await ProductsService.delete(pid);
+        if (deleteProd) {
+          res.json({ status: "success", message: "Producto eliminado" });
+        } else {
+          res.json({
+            status: "error",
+            message: "El producto no ha sido eliminado correctamente",
+          });
+        }
+      }else{
+        res.json({status:"error",message:"No tienes permisos"})
       }
     } catch (error) {
       res.send(error.message);

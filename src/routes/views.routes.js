@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { checkUserAuthenticated, showLoginView } from "../middlewares/auth.js";
+import { checkRole, checkUserAuthenticated, showLoginView } from "../middlewares/auth.js";
 import { ViewsController } from "../controllers/views.controller.js";
 const router = Router();
 
@@ -15,6 +15,8 @@ router.get("/registro", showLoginView, ViewsController.renderSignup);
 router.get("/login", showLoginView, ViewsController.renderLogin);
 
 router.get("/perfil", checkUserAuthenticated, ViewsController.renderProfile);
+
+router.get("/chat",checkRole(["user"]), ViewsController.renderChat);
 
 router.get("/realTimeProducts", ViewsController.renderRealTimeProducts);
 

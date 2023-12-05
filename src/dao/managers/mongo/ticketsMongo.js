@@ -4,7 +4,7 @@ import { addLogger } from "../../../helpers/logger.js";
 const logger = addLogger()
 
 export class TicketsMongo{
-  contructor(){
+  constructor(){
     this.model = ticketsModel
   }
   async createTicket(ticketInfo){

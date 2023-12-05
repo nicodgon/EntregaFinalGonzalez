@@ -1,6 +1,6 @@
 {{#if payload}}
-<h2>Te damos la bienvenida {{user.first_name}}</h2>
-<p>rol: {{user.role}}</p>
+<h2>Te damos la bienvenida {{userName}}</h2>
+<p>rol: {{userRole}}</p>
 <h1>Nuestro catalogo de productos</h1>
 {{#each payload}}
 <h4>Producto {{this.title}}:</h4>
@@ -14,6 +14,7 @@
   <li>Miniaturas: {{this.thumbnails}}</li>
   <li>Id: {{this._id}}</li>
 </ul>
+<button>Agregar al carrito</button>
 {{/each}}
 
 {{#if hasPrevPage}}

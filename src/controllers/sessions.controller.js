@@ -1,6 +1,7 @@
 import { UsersService } from "../services/users.service.js";
 import { generateEmailToken, recoveryEmail } from "../helpers/gmail.js";
 import { validateToken, createHash } from "../utils.js";
+import { UserDto } from "../dao/dto/user.dto.js";
 
 export class sessionsController {
   static renderLogin = (req, res) => {
@@ -36,7 +37,8 @@ export class sessionsController {
   };
   static getUser=(req,res)=>{
     const user = req.user
-    res.json({status:"success",message:user})
+    const dtoInfo = new UserDto(user)
+    res.json({status:"success",message:dtoInfo})
   }
   static forgotPassword=async(req,res)=>{
     try {

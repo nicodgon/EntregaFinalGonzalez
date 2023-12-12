@@ -2,6 +2,7 @@ import { UsersService } from "../services/users.service.js";
 import { generateEmailToken, recoveryEmail } from "../helpers/gmail.js";
 import { validateToken, createHash } from "../utils.js";
 import { UserDto } from "../dao/dto/user.dto.js";
+import { isValidPassword } from "../utils.js";
 
 export class sessionsController {
   static renderLogin = (req, res) => {
@@ -47,7 +48,7 @@ export class sessionsController {
       if(!user){
         return res.json({status:"error",message:"No es posible restablecer la contraseña"})
       }
-      const token = generateEmailToken(email,3*60) //Token de 3 min
+      const token = generateEmailToken(email,60*60) //Token de 3 min
       await recoveryEmail(req,email,token)
       res.send("Correo enviado, volver al inicio")
     } catch (error) {
@@ -61,10 +62,16 @@ export class sessionsController {
       const validEmail = validateToken(token)
       if(validEmail){
         const user = await UsersService.getByEmail(validEmail)
-        if(user){
-          user.password=createHash(newPassword)
-          await UsersService.updateUser(user._id, user)
-          res.send("Contraseña actualizada <a href='/login'>Ir al login</a>")
+        if(isValidPassword(user,newPassword)){
+          console.log('Contraseña igual')
+          return res.send("Hubo un error al intentar el cambio de contraseña, intente con otra nuevamente")
+        }else{
+          console.log('Contraseña distinta')
+          if(user){
+            user.password=createHash(newPassword)
+            await UsersService.updateUser(user._id, user)
+            res.send("Contraseña actualizada <a href='/login'>Ir al login</a>")
+          }
         }
       }else{
         return res.send("El token ya caduco, volver a intentarlo <a href='/forgot-password'>Restablecer contraseña</a>")

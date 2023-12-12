@@ -36,11 +36,17 @@ export class CartController{
       const pid = req.params.pid;
       const exist = await ProductsService.exists(pid);
       if (exist) {
-        const result = await CartsService.add(cid, pid);
-        if (result) {
-          res.json({ status: "success", message: "Producto agregado" });
-        } else {
-          res.json({ status: "error", message: "Ha ocurrido un error" });
+        const product = await ProductsService.getOne(pid)
+        const role = req.user.role
+        if(role === "premium" && product.owner.toString()=== req.user._id.toString()){
+          res.json({ status: "error", message: "No es posible agregar un producto propio" });
+        }else{
+          const result = await CartsService.add(cid, pid);
+          if (result) {
+            res.json({ status: "success", message: "Producto agregado" });
+          } else {
+            res.json({ status: "error", message: "Ha ocurrido un error" });
+          }
         }
       } else {
         res.json({ status: "error", message: "Producto no encontrado" });

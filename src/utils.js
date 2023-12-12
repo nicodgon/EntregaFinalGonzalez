@@ -3,7 +3,6 @@ import { fileURLToPath } from "url";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import {config} from "./config/config.js"
-import { truncateSync } from "fs";
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

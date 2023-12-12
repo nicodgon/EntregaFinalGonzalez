@@ -13,9 +13,9 @@ import { sessionsRouter } from "./routes/sessions.routes.js";
 import {chatModel} from "./dao/models/chat.model.js";
 import { mockingRouter } from "./routes/mocking.routes.js";
 import { loggerRouter } from "./routes/logger.routes.js";
-import { checkRole } from "./middlewares/auth.js";
-
-//passport
+import { errorHandler } from "./middlewares/errorHandler.js";
+import { swaggerSpecs } from "./config/swagger.config.js";
+import swaggerUI from "swagger-ui-express"
 import { initializePassport } from "./config/passportConfig.js";
 import passport from "passport";
 import { addLogger } from "./helpers/logger.js";
@@ -28,6 +28,7 @@ const logger = addLogger();
 //middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(errorHandler)
 
 app.use(express.static(path.join(__dirname, "/public")));
 
@@ -68,6 +69,7 @@ app.use("/api/sessions", sessionsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/mockingproducts", mockingRouter);
 app.use("/api/loggerTest", loggerRouter);
+app.use("/api/docs",swaggerUI.serve,swaggerUI.setup(swaggerSpecs)) //api documentada
 
 //socket.io products
 let products = [];
@@ -95,7 +97,7 @@ io.on("connection", (socket) => {
 
 //socket.io chat
 io.on("connection", (socket) => {
-  console.log("nuevo cliente conectado");
+  g("nuevo cliente conectado");
   socket.on("authenticated", async (msg) => {
     const messages = await chatModel.find();
     socket.emit("messageHistory", messages);

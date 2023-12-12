@@ -6,10 +6,12 @@ const swaggerOptions = {
   definition:{
     openapi:"3.0.1",
     info:{
-      title:"Documentacion api de productos",
+      title:"Documentacion api de ecommerce",
       version:"1.0.0",
       description:"Definicion de endpoint para la API de productos"
     },
-    apis:[`${path.join(__dirname,"/docs/**/*.yaml")}`]
-  }
+  },
+  apis:[`${path.join(__dirname,"/docs/**/*.yaml")}`],
 }
+
+export const swaggerSpecs = swaggerJsDoc(swaggerOptions);

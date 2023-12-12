@@ -41,7 +41,8 @@ const productSchema = new mongoose.Schema({
   },
   owner:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:usersCollection
+    ref:usersCollection,
+    default:"admin"
   }
 });
 

@@ -5,6 +5,7 @@ import githubStrategy from "passport-github2";
 import { config } from "./config.js";
 import { UsersService } from "../services/users.service.js";
 
+
 export const initializePassport = () => {
   passport.use(
     "signupStrategy",
@@ -25,7 +26,7 @@ export const initializePassport = () => {
             email: username,
             password: createHash(password),
           };
-          if(username.endsWith("@coder.com") && password === "adminCod3r123"){
+          if(username.endsWith("@coder.com") && password === config.server.secretSession){
             newUser.role="admin"
           }
           const userCreated = await UsersService.add(newUser);

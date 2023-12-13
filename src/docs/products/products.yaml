@@ -2,7 +2,7 @@
 paths:
   /api/products:
     get:
-      summary: Endpoint para obtener todos los productos de la base de datos
+      summary: Endpoint para obtener todos los productos
       tags:
         - Productos
       responses:
@@ -15,56 +15,43 @@ paths:
                 properties:
                   status:
                     type: string
-                    description: estado de la petición
                     example: success
                   payload:
                     type: object
-                    description: contiene el resultado relevante de la petición
                     properties:
                       docs:
                         type: array
-                        description: contiene los documentos
                         items:
                           $ref: "#components/schemas/Products"
                       totalDocs:
                         type: number
-                        description: cantidad de productos obtenidos
                         example: 1
                       limit:
                         type: number
-                        description: cantidad limite de productos por pagina
                         example: 10
                       totalPages:
                         type: number
-                        description: cantidad de paginas
                         example: 1
                       page:
                         type: number
-                        description: pagina actual
                         example: 1
                       pagingCounter:
                         type: number
-                        description: contador de paginacion
                         example: 1
                       hasPrevPage:
                         type: boolean
-                        description: indica si existe una pagina previa
                         example: false
                       hasNextPage:
                         type: boolean
-                        description: indica si existe una pagina siguiente
                         example: false
                       prevPage:
                         type: null
-                        description: indica la pagina previa
                         example: null
                       nextPage:
                         type: null
-                        description: indica la pagina siguiente
                         example: null
-                  
     post:
-      summary: Endpoint para agregar un producto a la base de datos
+      summary: Endpoint para agregar un producto
       tags:
         - Productos
       responses:
@@ -77,13 +64,16 @@ paths:
                 properties:
                   status:
                     type: string
-                    description: estado de la petición
                     example: success
                   message:
                     type: string
-                    description: mensaje descriptivo sobre la petición
                     example: producto agregado
-                    
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/BodyProduct"
   /api/products/{pid}:
     parameters:
       - name: uid
@@ -93,12 +83,12 @@ paths:
         schema:
           type: string
     get:
-      summary: Endpoint para obtener un producto por su id
+      summary: Endpoint para obtener un producto
       tags:
         - Productos
       responses:
         "200":
-          description: Se obtuvieron correctamente los productos
+          description: Se obtuvo correctamente el producto
           content:
             application/json:
               schema:
@@ -106,11 +96,9 @@ paths:
                 properties:
                   status:
                     type: string
-                    description: estado de la petición
                     example: success
                   payload:
                     type: object
-                    description: contiene el resultado relevante de la petición
                     $ref: "#components/schemas/Products"
     put:
       summary: Endpoint para actualizar un producto
@@ -118,7 +106,7 @@ paths:
         - Productos
       responses:
         "200":
-          description: Se obtuvieron correctamente los productos
+          description: Se actualizó correctamente el producto
           content:
             application/json:
               schema:
@@ -126,80 +114,34 @@ paths:
                 properties:
                   status:
                     type: string
-                    description: estado de la petición
                     example: success
                   message:
                     type: string
-                    description: mensaje descriptivo sobre la petición
                     example: producto actualizado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/BodyProduct"
     delete:
       summary: Endpoint para eliminar un producto
       tags:
         - Productos
       responses:
         "200":
-          description: Se obtuvieron correctamente los productos
+          description: Se eliminó correctamente el producto
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#components/schemas/Products"
-
-# Rutas de carritos
-  /api/carts:
-    get:
-      summary: Endpoint para obtener todos los carritos
-      tags:
-        - Carritos
-      responses:
-        "200":
-          description: Se obtuvieron correctamente los carritos
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#components/schemas/Carts"
-    post:
-      summary: Endpoint para obtener todos los carritos
-      tags:
-        - Carritos
-      responses:
-        "200":
-          description: Se obtuvieron correctamente los carritos
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#components/schemas/Carts"
-    put:
-      summary: Endpoint para obtener todos los carritos
-      tags:
-        - Carritos
-      responses:
-        "200":
-          description: Se obtuvieron correctamente los carritos
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#components/schemas/Carts"
-    delete:
-      summary: Endpoint para obtener todos los carritos
-      tags:
-        - Carritos
-      responses:
-        "200":
-          description: Se obtuvieron correctamente los carritos
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#components/schemas/Carts"
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: producto eliminado
 
 components:
   schemas:
@@ -251,29 +193,39 @@ components:
         category: remeras
         owner: 65714f651e407ced0048ba99
         __v: 4
-
-    Carts:
-      type: object
+  requestBodies:
+    BodyProduct:
       properties:
-        _id:
-          type: objectId
-          description: id del producto generado por mongoDB
-        products:
-          type: array
-          items:
-            type: object
-            properties:
-              product:
-                type: objectId
-                description: id del producto
-              quantity:
-                type: number
-                description: cantidad del producto
+        title:
+          type: string
+          description: nombre del producto
+        description:
+          type: string
+          description: descripción del producto
+        price:
+          type: number
+          description: precio del producto
+        thumbnails:
+          type: string
+          description: imagenes del producto
+        code:
+          type: string
+          description: codigo del producto
+        stock:
+          type: number
+          description: cantidad disponible del producto
+        status:
+          type: boolean
+          description: estado del producto
+        category:
+          type: string
+          description: categoria del producto
       example:
-        _id: 65715d44fc6e3e93e42353cb
-        products: [
-          {
-            product: 65115d44fc6e3e93e42353ca,
-            quantity: 2
-          }
-        ]
+        title: remera
+        description: naranja
+        price: 14000
+        thumbnails: sin imagen
+        code: 39949113
+        stock: 12
+        status: true
+        category: remeras

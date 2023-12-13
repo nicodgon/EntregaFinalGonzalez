@@ -86,7 +86,7 @@ export class ProductsMongo {
   async existsProduct(id) {
     try {
       const prod = await this.model.find({ _id: { $eq: id } });
-      if (prod) {
+      if (prod.length !== 0) {
         return true;
       } else {
         return false;

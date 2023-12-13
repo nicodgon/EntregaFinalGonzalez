@@ -1,7 +1,7 @@
 import { cartsModel } from "../../models/carts.model.js";
 import { addLogger } from "../../../helpers/logger.js";
 
-const logger = addLogger()
+const logger = addLogger();
 
 export class CartsMongo {
   constructor() {
@@ -19,7 +19,7 @@ export class CartsMongo {
       const content = await this.model.create(newCart);
       return content;
     } catch (error) {
-      logger.error("Ha ocurrido un error")
+      logger.error("Ha ocurrido un error");
     }
   }
 
@@ -28,14 +28,15 @@ export class CartsMongo {
     try {
       const compareId = await this.model
         .findById(id)
-        .populate("products.product").lean();
+        .populate("products.product")
+        .lean();
       if (!compareId) {
         return false;
       } else {
         return compareId;
       }
     } catch (error) {
-      logger.error("Ha ocurrido un error")
+      logger.error("Ha ocurrido un error");
     }
   }
 
@@ -51,7 +52,7 @@ export class CartsMongo {
         quantity: 1,
       };
       const existingProductIndex = cart.products.findIndex(
-        p => p.product == pid
+        (p) => p.product == pid
       );
       if (existingProductIndex !== -1) {
         cart.products[existingProductIndex].quantity += 1;
@@ -61,7 +62,7 @@ export class CartsMongo {
       const updatedCart = await cart.save();
       return updatedCart;
     } catch (error) {
-      logger.error("Ha ocurrido un error")
+      logger.error("Ha ocurrido un error");
     }
   }
 
@@ -83,7 +84,7 @@ export class CartsMongo {
         throw new Error("Producto no encontrado");
       }
     } catch (error) {
-      logger.error("Ha ocurrido un error")
+      logger.error("Ha ocurrido un error");
     }
   }
 
@@ -91,29 +92,24 @@ export class CartsMongo {
   async deleteAllProductsFromCart(cid) {
     try {
       const cart = await this.model.findById(cid);
-      if (!cart) {
-        throw new Error("Carrito no encontrado");
-      }
       cart.products = [];
       const delAll = await cart.save();
       return delAll;
     } catch (error) {
-      logger.error("Ha ocurrido un error")
+      logger.error("Ha ocurrido un error");
     }
   }
 
   //Actualizar todos los productos del carrito
   async updateAllProductsFromCart(cid, prods) {
     try {
-      const cart = await this.model.findById(cid);
-      if (!cart) {
-        throw new Error("Carrito no encontrado");
-      }
-      cart.products = prods;
-      const updateAll = await cart.save();
-      return updateAll;
+      const newProducts = await this.model.updateOne(
+        { _id: cid },
+        { products: prods }
+      );
+      return newProducts;
     } catch (error) {
-      logger.error("Ha ocurrido un error")
+      logger.error("Ha ocurrido un error");
     }
   }
 
@@ -135,7 +131,7 @@ export class CartsMongo {
         throw new Error("Producto no encontrado");
       }
     } catch (error) {
-      logger.error("Ha ocurrido un error")
+      logger.error("Ha ocurrido un error");
     }
   }
 }

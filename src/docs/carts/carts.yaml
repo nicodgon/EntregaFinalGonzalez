@@ -1,0 +1,267 @@
+# Rutas de carritos
+paths:
+  /api/carts:
+    post:
+      summary: Endpoint para agregar un carrito
+      tags:
+        - Carritos
+      responses:
+        "200":
+          description: Se agregó correctamente el carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: carrito agregado
+  /api/carts/{cid}:
+    parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito
+        schema:
+          type: string
+    get:
+      summary: Endpoint para obtener un carrito
+      tags:
+        - Carritos
+      responses:
+        "200":
+          description: Se obtuvo correctamente el carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    type: object
+                    properties:
+                      _id:
+                        type: objectId
+                        example: 656e69b8debea886e469c255
+                      products:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            product:
+                              type: object
+                              $ref: "#components/schemas/Products"
+                            quantity:
+                              type: number
+                              example: 1
+                            _id:
+                              type: string
+                              example: 6577ff20ac3fd96785504437
+                      __v:
+                        type: number
+                        example: 18
+    put:
+      summary: Endpoint para actualizar todos los productos de un carrito
+      tags:
+        - Carritos
+      responses:
+        "200":
+          description: Se actualizaron correctamente los productos del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: los productos del carrito han sido actualizados correctamente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              items:
+                type: object
+                properties:
+                  product:
+                    type: objectId
+                    description: id del producto
+                    example: 65715d44fc6e3e93e42353cb
+                  quantity:
+                    type: number
+                    description: cantidad del producto
+                    example: 2
+    delete:
+      summary: Endpoint para eliminar todos los productos del carrito
+      tags:
+        - Carritos
+      responses:
+        "200":
+          description: Se eliminaron correctamente todos los productos del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: todos los productos del carrito han sido eliminados correctamente
+  /api/carts/{cid}/purchase:
+    parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito
+        schema:
+          type: string
+    post:
+      summary: Endpoint crear el ticket de compra
+      tags:
+        - Carritos
+      responses:
+        "200":
+          description: Se creó correctamente el ticket de compra
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: 214a131a-2bd7-470b-80a8-23a48214592c
+                      purchase_datetime:
+                        type: Date
+                        example: 2023-12-12T19:47:44.320Z
+                      amount:
+                        type: number
+                        example: 63000
+                      _id:
+                        type: objectId
+                        example: 6578b8e03067ca70f576ee82
+                      __v:
+                        type: number
+                        example: 0
+  /api/carts/{cid}/product/{pid}:
+    parameters:
+      - name: cid
+        in: path
+        required: true
+        description: id del carrito
+        schema:
+          type: string
+      - name: pid
+        in: path
+        required: true
+        description: id del producto
+        schema:
+          type: string
+    post:
+      summary: Endpoint para agregar un producto al carrito
+      tags:
+        - Carritos
+      responses:
+        "200":
+          description: Se agregó correctamente el producto al carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: producto agregado
+    put:
+      summary: Endpoint para actualizar la cantidad de un producto del carrito
+      tags:
+        - Carritos
+      responses:
+        "200":
+          description: Se actualizó correctamente la cantidad del producto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: la cantidad del producto ha sido actualizada correctamente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: number
+                  description: cantidad del producto
+                  example: 4
+    delete:
+      summary: Endpoint para eliminar un producto del carrito
+      tags:
+        - Carritos
+      responses:
+        "200":
+          description: Se eliminó correctamente el producto del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: el producto ha sido eliminado correctamente
+
+components:
+  schemas:
+    Carts:
+      type: object
+      properties:
+        _id:
+          type: objectId
+          description: id del producto generado por mongoDB
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: objectId
+                description: id del producto
+              quantity:
+                type: number
+                description: cantidad del producto
+      example:
+        _id: 65715d44fc6e3e93e42353cb
+        products: [
+          {
+            product: 65115d44fc6e3e93e42353ca,
+            quantity: 2
+          }
+        ]

@@ -70,13 +70,21 @@ export class productsController {
     try {
       const pid = req.params.pid;
       const prod = req.body;
-      const updateProd = await ProductsService.update(pid, prod);
-      if (updateProd) {
-        res.json({ status: "success", message: "Producto actualizado" });
-      } else {
+      const exist = await ProductsService.exists(pid);
+      if (exist) {
+        const updateProd = await ProductsService.update(pid, prod);
+        if (updateProd) {
+          res.json({ status: "success", message: "Producto actualizado" });
+        } else {
+          res.json({
+            status: "error",
+            message: "El producto no ha sido actualizado correctamente",
+          });
+        }
+      }else{
         res.json({
           status: "error",
-          message: "El producto no ha sido actualizado correctamente",
+          message: "El id del producto no existe",
         });
       }
     } catch (error) {

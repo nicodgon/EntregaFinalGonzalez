@@ -79,7 +79,7 @@ export class CartController{
       if (result) {
         res.json({
           status: "success",
-          message: "Los productos del carrito han sido eliminados correctamente",
+          message: "Todos los productos del carrito han sido eliminados correctamente",
         });
       } else {
         res.json({ status: "error", message: "ha ocurrido un error" });
